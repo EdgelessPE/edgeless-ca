@@ -19,8 +19,9 @@ func setupRouter() *gin.Engine {
 		c.String(http.StatusOK, "pong")
 	})
 
-	// User
+	// Routers
 	routers.RegisterUserRoutes(r)
+	routers.RegisterAuthRoutes(r.Group("/auth"))
 
 	return r
 }
