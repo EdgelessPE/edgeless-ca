@@ -1,10 +1,11 @@
 package routers
 
 import (
-	"github.com/gin-gonic/gin"
 	"nep-keychain-backend/config"
 	"nep-keychain-backend/models"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func RegisterUserRoutes(r *gin.Engine) {

@@ -23,6 +23,7 @@ func setupRouter() *gin.Engine {
 	// Routers
 	routers.RegisterUserRoutes(r)
 	routers.RegisterAuthRoutes(r.Group("/auth"))
+	routers.RegisterTokenRoutes(r.Group("/token"))
 
 	return r
 }

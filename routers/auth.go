@@ -36,8 +36,7 @@ func RegisterAuthRoutes(r *gin.RouterGroup) {
 			PwdHash: payload.PwdHash,
 		}
 		config.DB.Create(&user)
-		token, _ := config.GenerateToken(user.ID)
-		c.JSON(http.StatusOK, gin.H{"user": user, "token": token})
+		c.JSON(http.StatusOK, gin.H{"user": user})
 	})
 	r.POST("/login", config.JWTMiddleware(), func(c *gin.Context) {
 		var payload vo.LoginPayload
@@ -53,6 +52,7 @@ func RegisterAuthRoutes(r *gin.RouterGroup) {
 		if payload.PwdHash != user.PwdHash {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "wrong password"})
 		}
-		c.JSON(http.StatusOK, gin.H{"name": user.Name, "email": user.Email})
+		token, _ := config.GenerateToken(user.ID)
+		c.JSON(http.StatusOK, gin.H{"name": user.Name, "email": user.Email, "token": token})
 	})
 }
