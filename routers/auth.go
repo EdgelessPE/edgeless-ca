@@ -1,11 +1,12 @@
 package routers
 
 import (
-	"github.com/gin-gonic/gin"
 	"nep-keychain-backend/config"
 	"nep-keychain-backend/models"
 	"nep-keychain-backend/vo"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func RegisterAuthRoutes(r *gin.RouterGroup) {
@@ -29,15 +30,17 @@ func RegisterAuthRoutes(r *gin.RouterGroup) {
 			return
 		}
 
+		token, _ := config.GenerateToken(user.ID)
 		user = models.User{
 			Name:    payload.Name,
 			Email:   payload.Email,
 			PwdHash: payload.PwdHash,
+			Token:   token,
 		}
 		config.DB.Create(&user)
 		c.JSON(http.StatusOK, gin.H{"user": user})
 	})
-	r.POST("/login", func(c *gin.Context) {
+	r.POST("/login", config.JWTMiddleware(), func(c *gin.Context) {
 		var payload vo.LoginPayload
 		if err := c.ShouldBind(&payload); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

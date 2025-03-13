@@ -9,4 +9,5 @@ type User struct {
 	Name    string `gorm:"unique;index;not null"`
 	Email   string `gorm:"unique;index;not null"`
 	PwdHash string `gorm:"not null"`
+	Token   string `gorm:"not null"`
 }
