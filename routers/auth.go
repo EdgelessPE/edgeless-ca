@@ -30,15 +30,14 @@ func RegisterAuthRoutes(r *gin.RouterGroup) {
 			return
 		}
 
-		token, _ := config.GenerateToken(user.ID)
 		user = models.User{
 			Name:    payload.Name,
 			Email:   payload.Email,
 			PwdHash: payload.PwdHash,
-			Token:   token,
 		}
 		config.DB.Create(&user)
-		c.JSON(http.StatusOK, gin.H{"user": user})
+		token, _ := config.GenerateToken(user.ID)
+		c.JSON(http.StatusOK, gin.H{"user": user, "token": token})
 	})
 	r.POST("/login", config.JWTMiddleware(), func(c *gin.Context) {
 		var payload vo.LoginPayload
