@@ -17,6 +17,18 @@ func RegisterAuthRoutes(r *gin.RouterGroup) {
 			return
 		}
 
+		// 用户不能为空且长度不少于 7 个字符
+		if payload.Name == "" || len(payload.Name) < 7 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "user name is required and must be at least 7 characters long"})
+			return
+		}
+
+		// 密码不能为空
+		if payload.PwdHash == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "password is required"})
+			return
+		}
+
 		// 检查用户名和邮箱重复
 		var user models.User
 		config.DB.Where("name = ?", payload.Name).First(&user)
@@ -45,7 +57,8 @@ func RegisterAuthRoutes(r *gin.RouterGroup) {
 		}
 
 		var user models.User
-		config.DB.Where("name = ?", payload.Name).First(&user)
+		// 查找用户，名称或邮箱匹配
+		config.DB.Where("name =? OR email =?", payload.Name, payload.Name).First(&user)
 		if user.Name == "" {
 			c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
 		}
