@@ -2,7 +2,7 @@
   <div class="content">
     <h1>Rsbuild with Vue</h1>
     <p>Start building amazing things with Rsbuild.</p>
-    <Button label="Submit" />
+    <Button label="Submit" class="w-320px"/>
     
     <div class="card flex justify-center">
         <InputGroup class="sm:!w-96">

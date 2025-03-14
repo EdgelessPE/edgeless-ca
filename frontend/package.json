@@ -13,6 +13,8 @@
   "dependencies": {
     "@primeuix/themes": "^1.0.0",
     "@primevue/auto-import-resolver": "^4.3.2",
+    "@unocss/preset-attributify": "66.1.0-beta.5",
+    "@unocss/preset-uno": "66.1.0-beta.5",
     "primevue": "^4.3.2",
     "unplugin-vue-components": "^28.4.1",
     "vue": "^3.5.13"
@@ -21,10 +23,12 @@
     "@eslint/js": "^9.21.0",
     "@rsbuild/core": "^1.2.16",
     "@rsbuild/plugin-vue": "^1.0.7",
+    "@unocss/webpack": "66.1.0-beta.5",
     "eslint": "^9.21.0",
     "globals": "^16.0.0",
     "prettier": "^3.5.2",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.25.0"
+    "typescript-eslint": "^8.25.0",
+    "unocss": "66.1.0-beta.5"
   }
 }
