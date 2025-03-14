@@ -4,6 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"io"
+	"nep-keychain-backend/config"
+	"nep-keychain-backend/models"
+	"nep-keychain-backend/utils"
 	"net/http"
 	"os"
 
@@ -62,8 +65,8 @@ func OAuthCallback(c *gin.Context) {
 	defer resp.Body.Close()
 
 	data, _ := io.ReadAll(resp.Body)
-	var user map[string]interface{}
-	if err := json.Unmarshal(data, &user); err != nil {
+	var gh_user map[string]interface{}
+	if err := json.Unmarshal(data, &gh_user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to parse user info"})
 		return
 	}
@@ -92,10 +95,29 @@ func OAuthCallback(c *gin.Context) {
 		}
 	}
 
+	// 如果用户邮箱不存在则在数据库中创建用户
+	var user models.User
+	var tmpPwd string
+	config.DB.Where("email = ?", primaryEmail).First(&user)
+	if user.Email == "" {
+		tmpPwd = utils.RandomString(16)
+		user = models.User{
+			Name:    gh_user["login"].(string),
+			Email:   primaryEmail,
+			PwdHash: utils.HashStringToHexBlake3(tmpPwd),
+		}
+		config.DB.Create(&user)
+	}
+
+	// 生成token
+	authToken, _ := config.GenerateToken(user.ID)
+
 	// 返回用户信息和主邮箱
 	c.JSON(http.StatusOK, gin.H{
-		"name":  user["name"],
-		"email": primaryEmail,
+		"name":   user.Name,
+		"email":  primaryEmail,
+		"token":  authToken,
+		"tmpPwd": tmpPwd,
 	})
 }
 

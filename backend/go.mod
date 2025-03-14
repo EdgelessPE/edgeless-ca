@@ -11,7 +11,10 @@ require (
 	gorm.io/gorm v1.25.12
 )
 
-require golang.org/x/oauth2 v0.28.0 // indirect
+require (
+	github.com/zeebo/blake3 v0.2.4 // indirect
+	golang.org/x/oauth2 v0.28.0 // indirect
+)
 
 require (
 	github.com/bytedance/sonic v1.12.9 // indirect
