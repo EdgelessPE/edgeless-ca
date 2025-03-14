@@ -8,13 +8,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
 )
 
 var (
 	JWTSecret = []byte("your-secret-key")
 )
 
-func Init() {
+func init() {
+	if err := godotenv.Load(); err != nil {
+		panic("Error loading .env file")
+	}
 	JWTSecret = []byte(os.Getenv("JWT_SECRET"))
 }
 
