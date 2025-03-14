@@ -31,6 +31,7 @@ func setupRouter() *gin.Engine {
 	apiGroup := r.Group("/api")
 	routers.RegisterAuthRoutes(apiGroup.Group("/auth"))
 	routers.RegisterTokenRoutes(apiGroup.Group("/token"))
+	routers.RegisterOAuthRoutes(apiGroup.Group("/oauth"))
 
 	return r
 }

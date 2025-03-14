@@ -11,6 +11,8 @@ require (
 	gorm.io/gorm v1.25.12
 )
 
+require golang.org/x/oauth2 v0.28.0 // indirect
+
 require (
 	github.com/bytedance/sonic v1.12.9 // indirect
 	github.com/bytedance/sonic/loader v0.2.3 // indirect
