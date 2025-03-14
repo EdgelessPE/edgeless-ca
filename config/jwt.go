@@ -2,15 +2,21 @@ package config
 
 import (
 	"errors"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"net/http"
-	"time"
 )
 
 var (
-	JWTSecret = []byte("your-secret-key") // 请替换为实际的密钥
+	JWTSecret = []byte("your-secret-key")
 )
+
+func Init() {
+	JWTSecret = []byte(os.Getenv("JWT_SECRET"))
+}
 
 type Claims struct {
 	UserID uint `json:"user_id"`

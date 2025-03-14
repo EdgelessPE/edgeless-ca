@@ -8,7 +8,14 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
+
+func init() {
+	if err := godotenv.Load(); err != nil {
+		panic("Error loading .env file")
+	}
+}
 
 func setupRouter() *gin.Engine {
 	// Disable Console Color
@@ -28,6 +35,7 @@ func setupRouter() *gin.Engine {
 }
 
 func main() {
+	config.Init()
 	config.InitDB()
 	config.DB.AutoMigrate(&models.User{})
 	log.Println("Database initialized and tables migrated!")
