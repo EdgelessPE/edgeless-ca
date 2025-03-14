@@ -2,6 +2,22 @@
   <div class="content">
     <h1>Rsbuild with Vue</h1>
     <p>Start building amazing things with Rsbuild.</p>
+    <Button label="Submit" />
+    
+    <div class="card flex justify-center">
+        <InputGroup class="sm:!w-96">
+            <InputGroupAddon>
+                <i class="pi pi-clock"></i>
+            </InputGroupAddon>
+            <InputGroupAddon>
+                <i class="pi pi-star-fill"></i>
+            </InputGroupAddon>
+            <InputNumber placeholder="Price" />
+            <InputGroupAddon>$</InputGroupAddon>
+            <InputGroupAddon>.00</InputGroupAddon>
+        </InputGroup>
+    </div>
+
   </div>
 </template>
 
