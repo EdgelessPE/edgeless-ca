@@ -13,6 +13,8 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/github"
 
+	"nep-keychain-backend/vo"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -45,21 +47,21 @@ func OAuthLogin(c *gin.Context) {
 func OAuthCallback(c *gin.Context) {
 	state := c.Query("state")
 	if state != oauthStateString {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid oauth state"})
+		c.JSON(http.StatusBadRequest, vo.BaseResponse[any]{Code: http.StatusBadRequest, Msg: "无效的 OAuth 状态", Data: nil})
 		return
 	}
 
 	code := c.Query("code")
 	token, err := oauthConf.Exchange(context.Background(), code)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to exchange token"})
+		c.JSON(http.StatusInternalServerError, vo.BaseResponse[any]{Code: http.StatusInternalServerError, Msg: "令牌交换失败", Data: nil})
 		return
 	}
 
 	client := oauthConf.Client(context.Background(), token)
 	resp, err := client.Get("https://api.github.com/user")
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user info"})
+		c.JSON(http.StatusInternalServerError, vo.BaseResponse[any]{Code: http.StatusInternalServerError, Msg: "获取用户信息失败", Data: nil})
 		return
 	}
 	defer resp.Body.Close()
@@ -67,14 +69,14 @@ func OAuthCallback(c *gin.Context) {
 	data, _ := io.ReadAll(resp.Body)
 	var gh_user map[string]interface{}
 	if err := json.Unmarshal(data, &gh_user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to parse user info"})
+		c.JSON(http.StatusInternalServerError, vo.BaseResponse[any]{Code: http.StatusInternalServerError, Msg: "解析用户信息失败", Data: nil})
 		return
 	}
 
 	// 获取用户邮箱信息
 	emailResp, err := client.Get("https://api.github.com/user/emails")
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to get user emails"})
+		c.JSON(http.StatusInternalServerError, vo.BaseResponse[any]{Code: http.StatusInternalServerError, Msg: "获取用户邮箱失败", Data: nil})
 		return
 	}
 	defer emailResp.Body.Close()
@@ -82,7 +84,7 @@ func OAuthCallback(c *gin.Context) {
 	emailData, _ := io.ReadAll(emailResp.Body)
 	var emails []map[string]interface{}
 	if err := json.Unmarshal(emailData, &emails); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to parse user emails"})
+		c.JSON(http.StatusInternalServerError, vo.BaseResponse[any]{Code: http.StatusInternalServerError, Msg: "解析用户邮箱失败", Data: nil})
 		return
 	}
 
@@ -113,12 +115,7 @@ func OAuthCallback(c *gin.Context) {
 	authToken, _ := config.GenerateToken(user.ID)
 
 	// 返回用户信息和主邮箱
-	c.JSON(http.StatusOK, gin.H{
-		"name":   user.Name,
-		"email":  primaryEmail,
-		"token":  authToken,
-		"tmpPwd": tmpPwd,
-	})
+	c.JSON(http.StatusOK, vo.BaseResponse[map[string]string]{Code: http.StatusOK, Msg: "Success", Data: map[string]string{"name": user.Name, "email": primaryEmail, "token": authToken, "tmpPwd": tmpPwd}})
 }
 
 func RegisterOAuthRoutes(r *gin.RouterGroup) {
