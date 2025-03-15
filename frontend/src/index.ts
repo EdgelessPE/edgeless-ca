@@ -1,17 +1,20 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import PrimeVue from "primevue/config";
+import PrimeVue from 'primevue/config';
 import './index.css';
 import Aura from '@primeuix/themes/aura';
-import 'virtual:uno.css'
+import 'virtual:uno.css';
+import { router } from './router';
 
-createApp(App).use(PrimeVue, {
-  ripple: true,
-  theme: {
+createApp(App)
+  .use(PrimeVue, {
+    ripple: true,
+    theme: {
       preset: Aura,
       options: {
         darkModeSelector: 'system',
-      }
-  },
-
-}).mount('#root');
+      },
+    },
+  })
+  .use(router)
+  .mount('#root');
