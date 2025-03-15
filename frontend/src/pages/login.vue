@@ -129,7 +129,7 @@ const onFormSubmit = async ({ valid, values }: FormSubmitEvent) => {
       emailLoading.value = false;
     });
     setToken(token);
-    router.push('/home');
+    router.push('/');
   }
 };
 </script>
