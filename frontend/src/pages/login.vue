@@ -19,6 +19,7 @@
             label="使用 GitHub 账号"
             icon="pi pi-github"
             :size="showEmailLogin ? undefined : 'large'"
+            @click="LoginWithGitHub"
           />
         </div>
         <Divider align="center" type="dotted" class="!mb-0">
@@ -28,16 +29,16 @@
           <span>使用邮箱登录</span>
           <div class="flex flex-col gap-2 w-full">
             <FloatLabel variant="on">
-              <InputText name="email" type="text" fluid />
+              <InputText v-model="email" name="email" type="text" fluid />
               <label for="on_label">邮箱</label>
             </FloatLabel>
             <FloatLabel variant="on">
-              <Password name="password" toggleMask fluid />
+              <Password v-model="password" toggleMask fluid :feedback="false" />
               <label for="on_label">密码</label>
             </FloatLabel>
           </div>
           <div style="height: 32px">
-            <Button class="w-full" label="登录" />
+            <Button class="w-full" label="登录" @click="onSubmit" />
           </div>
         </template>
         <template v-else>
@@ -58,6 +59,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { Login } from '../api/auth';
+import { LoginWithGitHub } from '../api/oauth';
 
 const showEmailLogin = ref(false);
+
+const email = ref('');
+const password = ref('');
+
+const onSubmit = async () => {
+  const res = await Login(email.value, password.value);
+  console.log(res);
+};
 </script>
