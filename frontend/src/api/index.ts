@@ -1,4 +1,6 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { emitter } from '../utils/emit';
+import type { BaseResponse } from './types';
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -24,11 +26,12 @@ instance.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  (error: AxiosError<BaseResponse<unknown>>) => {
+    console.error(error);
     if (error.response) {
-      console.error('请求失败:', error.response.status, error.response.data);
+      emitter.emit('toast', 'error', '错误', error.response.data.msg, 3000);
     } else {
-      console.error('请求失败:', error.message);
+      emitter.emit('toast', 'error', '错误', error.message, 3000);
     }
     return Promise.reject(error);
   },

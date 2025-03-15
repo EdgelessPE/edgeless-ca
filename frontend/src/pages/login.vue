@@ -1,4 +1,5 @@
 <template>
+  <Toast />
   <div
     class="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-#134597 to-#338aca"
   >

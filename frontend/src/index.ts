@@ -5,6 +5,7 @@ import Aura from '@primeuix/themes/aura';
 import 'primeicons/primeicons.css';
 import 'virtual:uno.css';
 import './index.css';
+import ToastService from 'primevue/toastservice';
 import { router } from './router';
 
 createApp(App)
@@ -18,4 +19,5 @@ createApp(App)
     },
   })
   .use(router)
+  .use(ToastService)
   .mount('#app');
