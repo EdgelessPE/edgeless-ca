@@ -18,4 +18,4 @@ createApp(App)
     },
   })
   .use(router)
-  .mount('#root');
+  .mount('#app');
