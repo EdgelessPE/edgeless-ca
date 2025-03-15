@@ -20,7 +20,6 @@ emitter.on(
     detail: string,
     life: number,
   ) => {
-    console.log(severity, summary, detail, life);
     toast.add({ severity, summary, detail, life });
   },
 );
