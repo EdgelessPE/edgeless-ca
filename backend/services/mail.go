@@ -24,12 +24,12 @@ func SendVerifyCode(to string) (string, error) {
 	code := generateRandomCode()
 
 	// Append the verification code to the email body.
-	body := fmt.Sprintf("\n\nYour verification code is: %s", code)
+	body := fmt.Sprintf("Your verification code is: <strong>%s</strong>", code)
 
 	// Set up the email message.
 	msg := []byte("From: " + os.Getenv("MAIL_USER") + "\r\n" +
 		"To: " + to + "\r\n" +
-		"Subject: " + "验证码" + "\r\n" +
+		"Subject: " + "Edgeless CA Verification Code" + "\r\n" +
 		"\r\n" +
 		body + "\r\n")
 
