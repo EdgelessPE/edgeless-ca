@@ -28,9 +28,10 @@ func setupRouter() *gin.Engine {
 
 	// 配置跨域
 	server.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
-		AllowCredentials: true,
+		AllowOrigins:     []string{"http://localhost:5173", "https://ca.edgeless.top"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		AllowCredentials: true,
 	}))
 
 	// 配置可信代理
