@@ -52,7 +52,7 @@ func sendVerifyCode(c *gin.Context) {
 	var verify models.Verify
 	config.DB.Where("email =?", payload.Email).First(&verify)
 	if verify.Email != "" && verify.ExpireAt.After(time.Now()) {
-		c.JSON(http.StatusBadRequest, vo.BaseResponse[any]{Code: http.StatusBadRequest, Msg: "操作过于频繁", Data: nil})
+		c.JSON(http.StatusTooManyRequests, vo.BaseResponse[any]{Code: http.StatusTooManyRequests, Msg: "操作过于频繁", Data: nil})
 		return
 	}
 

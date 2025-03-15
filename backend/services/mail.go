@@ -1,23 +1,18 @@
 package services
 
 import (
-	"crypto/rand"
 	"crypto/tls"
-	"encoding/hex"
 	"fmt"
 	"log"
+	"math/rand"
 	"net"
 	"net/smtp"
 	"os"
 )
 
-// generateRandomCode generates a random verification code.
-func generateRandomCode() (string, error) {
-	code := make([]byte, 4) // 4 bytes for an 8-character hex string
-	if _, err := rand.Read(code); err != nil {
-		return "", err
-	}
-	return hex.EncodeToString(code), nil
+// generateRandomCode generates a 6-digit random verification code.
+func generateRandomCode() string {
+	return fmt.Sprintf("%06d", rand.Intn(1000000))
 }
 
 // SendVerifyCode sends an email with a verification code using SMTP.
@@ -26,10 +21,7 @@ func SendVerifyCode(to string) (string, error) {
 	auth := smtp.PlainAuth("", os.Getenv("MAIL_USER"), os.Getenv("MAIL_PASSWORD"), os.Getenv("MAIL_HOST"))
 
 	// Generate a random verification code.
-	code, err := generateRandomCode()
-	if err != nil {
-		return "", err
-	}
+	code := generateRandomCode()
 
 	// Append the verification code to the email body.
 	body := fmt.Sprintf("\n\nYour verification code is: %s", code)
