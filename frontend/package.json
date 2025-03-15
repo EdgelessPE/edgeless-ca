@@ -12,6 +12,7 @@
   "dependencies": {
     "@primeuix/themes": "^1.0.0",
     "@primevue/auto-import-resolver": "^4.3.2",
+    "@primevue/forms": "^4.3.2",
     "@unocss/preset-attributify": "66.1.0-beta.5",
     "@unocss/preset-wind3": "66.1.0-beta.5",
     "axios": "^1.8.3",
@@ -20,7 +21,8 @@
     "primevue": "^4.3.2",
     "unplugin-vue-components": "^28.4.1",
     "vue": "^3.5.13",
-    "vue-router": "4"
+    "vue-router": "4",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

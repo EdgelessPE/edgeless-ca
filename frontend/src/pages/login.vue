@@ -32,20 +32,33 @@
         </Divider>
         <template v-if="showEmailLogin">
           <span>使用邮箱登录</span>
-          <div class="flex flex-col gap-2 w-full">
+          <Form
+            v-slot="$form"
+            :resolver="resolver"
+            :initialValues="initialValues"
+            @submit="onFormSubmit"
+            class="flex flex-col gap-2 w-full"
+          >
             <FloatLabel variant="on">
               <InputText
-                v-model="email"
                 name="email"
                 type="text"
                 size="small"
                 fluid
+                autofocus
               />
               <label for="on_label">邮箱</label>
             </FloatLabel>
+            <Message
+              v-if="$form.email?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              >{{ $form.email.error?.message }}</Message
+            >
             <FloatLabel variant="on">
               <Password
-                v-model="password"
+                name="password"
                 toggleMask
                 size="small"
                 fluid
@@ -53,10 +66,17 @@
               />
               <label for="on_label">密码</label>
             </FloatLabel>
-          </div>
-          <div style="height: 32px">
-            <Button class="w-full" label="登录" @click="onSubmit" />
-          </div>
+            <Message
+              v-if="$form.password?.invalid"
+              severity="error"
+              size="small"
+              variant="simple"
+              >{{ $form.password.error?.message }}</Message
+            >
+            <div style="height: 32px">
+              <Button class="w-full" type="submit" label="登录" />
+            </div>
+          </Form>
         </template>
         <template v-else>
           <span>使用邮箱登录</span>
@@ -78,14 +98,30 @@
 import { ref } from 'vue';
 import { Login } from '../api/auth';
 import { LoginWithGitHub } from '../api/oauth';
+import { z } from 'zod';
+import { zodResolver } from '@primevue/forms/resolvers/zod';
+import { EMAIL_VALIDATOR, PASSWORD_SIMPLE_VALIDATOR } from '../utils/validator';
+import type { FormSubmitEvent } from '@primevue/forms';
 
 const showEmailLogin = ref(false);
+const initialValues = ref({
+  email: '',
+  password: '',
+});
 
-const email = ref('');
-const password = ref('');
+const resolver = ref(
+  zodResolver(
+    z.object({
+      email: EMAIL_VALIDATOR,
+      password: PASSWORD_SIMPLE_VALIDATOR,
+    }),
+  ),
+);
 
-const onSubmit = async () => {
-  const res = await Login(email.value, password.value);
-  console.log(res);
+const onFormSubmit = async ({ valid, values }: FormSubmitEvent) => {
+  if (valid) {
+    const res = await Login(values.email, values.password);
+    console.log(res);
+  }
 };
 </script>
