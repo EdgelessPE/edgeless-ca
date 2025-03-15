@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
+
+	"nep-keychain-backend/vo"
 )
 
 var (
@@ -47,7 +49,7 @@ func JWTMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.GetHeader("Authorization")
 		if tokenString == "" {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "未提供认证令牌"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, vo.BaseResponse[any]{Code: http.StatusUnauthorized, Msg: "未提供认证令牌", Data: nil})
 			return
 		}
 
@@ -58,15 +60,15 @@ func JWTMiddleware() gin.HandlerFunc {
 
 		if err != nil {
 			if errors.Is(err, jwt.ErrTokenExpired) {
-				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "令牌已过期"})
+				c.AbortWithStatusJSON(http.StatusUnauthorized, vo.BaseResponse[any]{Code: http.StatusUnauthorized, Msg: "令牌已过期", Data: nil})
 				return
 			}
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "无效的认证令牌"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, vo.BaseResponse[any]{Code: http.StatusUnauthorized, Msg: "无效的认证令牌", Data: nil})
 			return
 		}
 
 		if !token.Valid {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "无效的认证令牌"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, vo.BaseResponse[any]{Code: http.StatusUnauthorized, Msg: "无效的认证令牌", Data: nil})
 			return
 		}
 
