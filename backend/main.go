@@ -23,10 +23,10 @@ func errorHandler(c *gin.Context, info ratelimit.Info) {
 }
 
 func setupRouter() *gin.Engine {
-	r := gin.Default()
+	server := gin.Default()
 
 	// 配置可信代理
-	r.SetTrustedProxies([]string{"127.0.0.1"})
+	server.SetTrustedProxies([]string{"127.0.0.1"})
 
 	// 限频中间件
 	store := ratelimit.InMemoryStore(&ratelimit.InMemoryOptions{
@@ -38,26 +38,26 @@ func setupRouter() *gin.Engine {
 		KeyFunc:      keyFunc,
 	})
 
-	// Routers
-	apiGroup := r.Group("/api", mw)
-	apiGroup.GET("/ping", func(c *gin.Context) {
+	// 注册路由
+	r := server.Group("/api", mw)
+	r.GET("/ping", func(c *gin.Context) {
 		clientIP := c.ClientIP()
 		c.JSON(http.StatusOK, vo.BaseResponse[any]{Code: http.StatusOK, Msg: "pong", Data: map[string]string{"clientIP": clientIP}})
 	})
-	routers.RegisterAuthRoutes(apiGroup.Group("/auth"))
-	routers.RegisterTokenRoutes(apiGroup.Group("/token"))
-	routers.RegisterOAuthRoutes(apiGroup.Group("/oauth"))
+	routers.RegisterAuthRoutes(r.Group("/auth"))
+	routers.RegisterTokenRoutes(r.Group("/token"))
+	routers.RegisterOAuthRoutes(r.Group("/oauth"))
 
-	return r
+	return server
 }
 
 func main() {
+	// 初始化数据库
 	config.InitDB()
 	config.DB.AutoMigrate(&models.User{}, &models.Verify{})
 	log.Println("Database initialized and tables migrated!")
 
+	// 启动服务器
 	r := setupRouter()
-
-	// Listen and Server in 0.0.0.0:3000
 	r.Run(":3000")
 }
