@@ -31,7 +31,7 @@ func setupRouter() *gin.Engine {
 
 func main() {
 	config.InitDB()
-	config.DB.AutoMigrate(&models.User{})
+	config.DB.AutoMigrate(&models.User{}, &models.Verify{})
 	log.Println("Database initialized and tables migrated!")
 
 	r := setupRouter()
