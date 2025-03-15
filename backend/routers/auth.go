@@ -52,7 +52,7 @@ func sendVerifyCode(c *gin.Context) {
 	var verify models.Verify
 	config.DB.Where("email =?", payload.Email).First(&verify)
 	if verify.Email != "" && verify.ExpireAt.After(time.Now()) {
-		c.JSON(http.StatusBadRequest, vo.BaseResponse[any]{Code: http.StatusBadRequest, Msg: "验证码未过期", Data: nil})
+		c.JSON(http.StatusBadRequest, vo.BaseResponse[any]{Code: http.StatusBadRequest, Msg: "操作过于频繁", Data: nil})
 		return
 	}
 
@@ -62,7 +62,13 @@ func sendVerifyCode(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, vo.BaseResponse[any]{Code: http.StatusInternalServerError, Msg: err.Error(), Data: nil})
 		return
 	}
-	config.DB.Create(&models.Verify{Email: payload.Email, VerifyCode: code, ExpireAt: time.Now().Add(time.Minute * 10)})
+
+	if verify.Email == "" {
+		config.DB.Create(&models.Verify{Email: payload.Email, VerifyCode: code, ExpireAt: time.Now().Add(time.Minute * 10)})
+	} else {
+		config.DB.Model(&verify).Update("verify_code", code).Update("expire_at", time.Now().Add(time.Minute*10))
+	}
+
 	c.JSON(http.StatusOK, vo.BaseResponse[any]{Code: http.StatusOK, Msg: "Success", Data: nil})
 }
 
@@ -80,10 +86,13 @@ func recover(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, vo.BaseResponse[any]{Code: http.StatusBadRequest, Msg: "验证码已过期", Data: nil})
 		return
 	}
-	if verify.VerifyCode != payload.Code {
+	if payload.Code == "" || verify.VerifyCode == "" || verify.VerifyCode != payload.Code {
 		c.JSON(http.StatusBadRequest, vo.BaseResponse[any]{Code: http.StatusBadRequest, Msg: "验证码错误", Data: nil})
 		return
 	}
+
+	// 将验证码置空
+	config.DB.Model(&verify).Update("verify_code", "")
 
 	// 更新密码
 	config.DB.Model(&models.User{}).Where("email =?", payload.Email).Update("pwd_hash", payload.PwdHash)
