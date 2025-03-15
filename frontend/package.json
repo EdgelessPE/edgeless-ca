@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "rsbuild dev",
     "build": "rsbuild build",
-    "dev": "rsbuild dev --open",
     "format": "prettier --write .",
     "lint": "eslint .",
     "preview": "rsbuild preview"
@@ -14,7 +14,8 @@
     "@primeuix/themes": "^1.0.0",
     "@primevue/auto-import-resolver": "^4.3.2",
     "@unocss/preset-attributify": "66.1.0-beta.5",
-    "@unocss/preset-uno": "66.1.0-beta.5",
+    "@unocss/preset-wind3": "66.1.0-beta.5",
+    "primeicons": "^7.0.0",
     "primevue": "^4.3.2",
     "unplugin-vue-components": "^28.4.1",
     "vue": "^3.5.13",

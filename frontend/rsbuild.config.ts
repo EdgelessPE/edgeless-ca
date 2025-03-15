@@ -1,26 +1,27 @@
 import { defineConfig } from '@rsbuild/core';
 import { pluginVue } from '@rsbuild/plugin-vue';
 import Components from 'unplugin-vue-components/rspack';
-import {PrimeVueResolver} from '@primevue/auto-import-resolver';
+import { PrimeVueResolver } from '@primevue/auto-import-resolver';
 import { UnoCSSRspackPlugin } from '@unocss/webpack/rspack';
 import { presetAttributify } from '@unocss/preset-attributify';
-import { presetUno } from '@unocss/preset-uno';
-
+import { presetWind3 } from '@unocss/preset-wind3';
 
 export default defineConfig({
-  plugins: [pluginVue(),],
-  tools:{
-    rspack:{
-      plugins:[
+  html: {
+    title: 'Edgeless CA',
+    favicon: './src/assets/nep.ico',
+  },
+  plugins: [pluginVue()],
+  tools: {
+    rspack: {
+      plugins: [
         UnoCSSRspackPlugin({
-          presets: [presetUno(), presetAttributify()],
+          presets: [presetWind3(), presetAttributify()],
         }),
         Components({
-          resolvers: [
-            PrimeVueResolver()
-          ]
-        })
-      ]
-    }
-  }
+          resolvers: [PrimeVueResolver()],
+        }),
+      ],
+    },
+  },
 });

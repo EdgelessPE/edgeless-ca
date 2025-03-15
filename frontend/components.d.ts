@@ -9,8 +9,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
-    InputGroup: typeof import('primevue/inputgroup')['default']
-    InputGroupAddon: typeof import('primevue/inputgroupaddon')['default']
-    InputNumber: typeof import('primevue/inputnumber')['default']
+    Divider: typeof import('primevue/divider')['default']
+    InputText: typeof import('primevue/inputtext')['default']
+    Password: typeof import('primevue/password')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
   }
 }
