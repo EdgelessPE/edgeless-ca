@@ -26,11 +26,11 @@
             <label for="on_label">邮箱</label>
           </FloatLabel>
           <Button
-            label="验证"
+            :label="countdown ? `${countdown}s` : '验证'"
             class="whitespace-nowrap"
             :loading="sendLoading"
             :disabled="
-              disableSend || !$form.email?.value || $form.email?.invalid
+              Boolean(countdown) || !$form.email?.value || $form.email?.invalid
             "
             @click="onSendEmail"
           />
@@ -78,13 +78,13 @@
 <script setup lang="ts">
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import LoginLayout from '../components/LoginLayout.vue';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import type { FormSubmitEvent } from '@primevue/forms';
 import { z } from 'zod';
 import { Recover, SendEmail } from '../api/auth';
 import { router } from '../router';
 import { EMAIL_VALIDATOR, PASSWORD_VALIDATOR } from '../utils/validator';
-import { useLocalStorage } from '@vueuse/core';
+import { useIntervalFn, useLocalStorage } from '@vueuse/core';
 import { toast } from '../utils/toast';
 
 const lastSendEmailTime = useLocalStorage('lastSendEmailTime', 0);
@@ -93,9 +93,18 @@ const sendLoading = ref(false);
 const submitLoading = ref(false);
 const email = ref('');
 
-const disableSend = computed(() => {
-  return Date.now() - lastSendEmailTime.value < 10 * 60 * 1000;
-});
+const countdown = ref<number>();
+
+const { pause, resume } = useIntervalFn(() => {
+  const passed = Date.now() - lastSendEmailTime.value;
+  const tenMinutes = 10 * 60 * 1000;
+  if (passed < tenMinutes) {
+    countdown.value = Math.ceil((tenMinutes - passed) / 1000);
+  } else {
+    countdown.value = undefined;
+    pause();
+  }
+}, 1000);
 
 const onSendEmail = async () => {
   sendLoading.value = true;
@@ -103,6 +112,7 @@ const onSendEmail = async () => {
     sendLoading.value = false;
   });
   lastSendEmailTime.value = Date.now();
+  resume();
 };
 
 const initialValues = ref({
