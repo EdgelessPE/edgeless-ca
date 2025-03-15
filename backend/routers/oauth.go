@@ -103,10 +103,14 @@ func OAuthCallback(c *gin.Context) {
 	config.DB.Where("email = ?", primaryEmail).First(&user)
 	if user.Email == "" {
 		tmpPwd = utils.RandomString(16)
+		// 生成密钥对
+		publicKey, privateKey := GenerateKeyPair()
 		user = models.User{
-			Name:    gh_user["login"].(string),
-			Email:   primaryEmail,
-			PwdHash: utils.HashStringToHexBlake3(tmpPwd),
+			Name:         gh_user["login"].(string),
+			Email:        primaryEmail,
+			PwdHash:      utils.HashStringToHexBlake3(tmpPwd),
+			PublicToken:  publicKey,
+			PrivateToken: privateKey,
 		}
 		config.DB.Create(&user)
 	}
