@@ -93,15 +93,20 @@ const sendLoading = ref(false);
 const submitLoading = ref(false);
 const email = ref('');
 
-const countdown = ref<number>();
-
-const { pause, resume } = useIntervalFn(() => {
+const getCountdown = () => {
   const passed = Date.now() - lastSendEmailTime.value;
   const tenMinutes = 10 * 60 * 1000;
   if (passed < tenMinutes) {
-    countdown.value = Math.ceil((tenMinutes - passed) / 1000);
-  } else {
-    countdown.value = undefined;
+    return Math.ceil((tenMinutes - passed) / 1000);
+  }
+  return undefined;
+};
+
+const countdown = ref<number | undefined>(getCountdown());
+
+const { pause, resume } = useIntervalFn(() => {
+  countdown.value = getCountdown();
+  if (!countdown.value) {
     pause();
   }
 }, 1000);
