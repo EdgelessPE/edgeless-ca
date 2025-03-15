@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
-import { emitter } from '../utils/emit';
 import type { BaseResponse } from './types';
+import { toast } from '../utils/toast';
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -29,9 +29,9 @@ instance.interceptors.response.use(
   (error: AxiosError<BaseResponse<unknown>>) => {
     console.error(error);
     if (error.response) {
-      emitter.emit('toast', 'error', '错误', error.response.data.msg, 3000);
+      toast('error', '错误', error.response.data.msg, 3000);
     } else {
-      emitter.emit('toast', 'error', '错误', error.message, 3000);
+      toast('error', '错误', error.message, 3000);
     }
     return Promise.reject(error);
   },
