@@ -14,6 +14,7 @@ require (
 require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/gin-contrib/cors v1.7.3 // indirect
 	github.com/redis/go-redis/v9 v9.3.0 // indirect
 	github.com/uniformelemen/gin-rate-limit v0.0.0-20250310125756-6ef601e9c48e // indirect
 	github.com/zeebo/blake3 v0.2.4 // indirect

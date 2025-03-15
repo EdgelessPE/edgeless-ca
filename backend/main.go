@@ -11,6 +11,7 @@ import (
 
 	ratelimit "github.com/uniformelemen/gin-rate-limit"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,6 +25,13 @@ func errorHandler(c *gin.Context, info ratelimit.Info) {
 
 func setupRouter() *gin.Engine {
 	server := gin.Default()
+
+	// 配置跨域
+	server.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowCredentials: true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	}))
 
 	// 配置可信代理
 	server.SetTrustedProxies([]string{"127.0.0.1"})
