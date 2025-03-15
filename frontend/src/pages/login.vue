@@ -25,7 +25,11 @@
           label="使用 GitHub 账号"
           icon="pi pi-github"
           :size="showEmailLogin ? 'small' : 'large'"
-          @click="LoginWithGitHub"
+          :loading="githubLoading"
+          @click="
+            githubLoading = true;
+            LoginWithGitHub();
+          "
         />
         <Divider align="center" type="dotted" class="!mb-0">
           <b>或</b>
@@ -74,7 +78,12 @@
               >{{ $form.password.error?.message }}</Message
             >
             <div style="height: 32px">
-              <Button class="w-full" type="submit" label="登录" />
+              <Button
+                class="w-full"
+                type="submit"
+                label="登录"
+                :loading="emailLoading"
+              />
             </div>
           </Form>
         </template>
@@ -103,6 +112,8 @@ import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { EMAIL_VALIDATOR, PASSWORD_SIMPLE_VALIDATOR } from '../utils/validator';
 import type { FormSubmitEvent } from '@primevue/forms';
 
+const githubLoading = ref(false);
+const emailLoading = ref(false);
 const showEmailLogin = ref(false);
 const initialValues = ref({
   email: '',
@@ -120,7 +131,10 @@ const resolver = ref(
 
 const onFormSubmit = async ({ valid, values }: FormSubmitEvent) => {
   if (valid) {
-    const res = await Login(values.email, values.password);
+    emailLoading.value = true;
+    const res = await Login(values.email, values.password).finally(() => {
+      emailLoading.value = false;
+    });
     console.log(res);
   }
 };
