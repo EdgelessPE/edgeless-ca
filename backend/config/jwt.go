@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	JWTSecret = []byte("your-secret-key")
+	JWTSecret = []byte("1145141919810")
 )
 
 func init() {
