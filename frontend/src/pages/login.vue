@@ -20,15 +20,13 @@
           <h2 class="text-2xl font-bold">登录</h2>
           <span>使用 GitHub 注册或登录</span>
         </div>
-        <div style="height: 32px">
-          <Button
-            class="w-full"
-            label="使用 GitHub 账号"
-            icon="pi pi-github"
-            :size="showEmailLogin ? undefined : 'large'"
-            @click="LoginWithGitHub"
-          />
-        </div>
+        <Button
+          class="w-full"
+          label="使用 GitHub 账号"
+          icon="pi pi-github"
+          :size="showEmailLogin ? 'small' : 'large'"
+          @click="LoginWithGitHub"
+        />
         <Divider align="center" type="dotted" class="!mb-0">
           <b>或</b>
         </Divider>
@@ -36,11 +34,23 @@
           <span>使用邮箱登录</span>
           <div class="flex flex-col gap-2 w-full">
             <FloatLabel variant="on">
-              <InputText v-model="email" name="email" type="text" fluid />
+              <InputText
+                v-model="email"
+                name="email"
+                type="text"
+                size="small"
+                fluid
+              />
               <label for="on_label">邮箱</label>
             </FloatLabel>
             <FloatLabel variant="on">
-              <Password v-model="password" toggleMask fluid :feedback="false" />
+              <Password
+                v-model="password"
+                toggleMask
+                size="small"
+                fluid
+                :feedback="false"
+              />
               <label for="on_label">密码</label>
             </FloatLabel>
           </div>
