@@ -2,6 +2,7 @@
   <div
     class="flex flex-col items-center justify-center h-screen bg-#eee dark:bg-#000000"
   >
+    <I18nSwitch class="absolute top-4 left-4" />
     <Toast />
     <RouterView />
     <Footer />

@@ -27,7 +27,7 @@
 import { computed, ref } from 'vue';
 import { useLoginInfo, removeLoginInfo } from '../utils/login';
 import { useRouter } from 'vue-router';
-
+import type { MenuItem } from 'primevue/menuitem';
 const emits = defineEmits(['view-my-key']);
 
 const op = ref<any>(null);
@@ -41,7 +41,7 @@ const text = computed(() => {
   return `${userInfo.value?.name} <${userInfo.value?.email}>`;
 });
 
-const items = [
+const items: MenuItem[] = [
   {
     label: '查看我的密钥对',
     icon: 'pi pi-key',
