@@ -15,7 +15,9 @@
           可信 Nep 包密钥对服务
         </span>
       </div>
-      <div class="w-40% h-full flex flex-col gap-4 rounded-3xl bg-#18181b p-12">
+      <div
+        class="w-40% h-full flex flex-col gap-4 rounded-3xl bg-white dark:bg-#18181b p-12"
+      >
         <slot />
       </div>
     </div>

@@ -95,9 +95,9 @@ const email = ref('');
 
 const getCountdown = () => {
   const passed = Date.now() - lastSendEmailTime.value;
-  const tenMinutes = 10 * 60 * 1000;
-  if (passed < tenMinutes) {
-    return Math.ceil((tenMinutes - passed) / 1000);
+  const oneMinute = 1 * 60 * 1000;
+  if (passed < oneMinute) {
+    return Math.ceil((oneMinute - passed) / 1000);
   }
   return undefined;
 };

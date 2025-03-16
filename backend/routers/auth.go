@@ -48,10 +48,10 @@ func sendVerifyCode(c *gin.Context) {
 		return
 	}
 
-	// 检查当前验证码是否过期
+	// 检查是否允许重发
 	var verify models.Verify
 	config.DB.Where("email =?", payload.Email).First(&verify)
-	if verify.Email != "" && verify.ExpireAt.After(time.Now()) {
+	if verify.Email != "" && verify.AllowResend.After(time.Now()) {
 		c.JSON(http.StatusTooManyRequests, vo.BaseResponse[any]{Code: http.StatusTooManyRequests, Msg: "操作过于频繁", Data: nil})
 		return
 	}
@@ -63,10 +63,12 @@ func sendVerifyCode(c *gin.Context) {
 		return
 	}
 
+	expireAt := time.Now().Add(time.Minute * 10)
+	allowResend := time.Now().Add(time.Second * 60)
 	if verify.Email == "" {
-		config.DB.Create(&models.Verify{Email: payload.Email, VerifyCode: code, ExpireAt: time.Now().Add(time.Minute * 10)})
+		config.DB.Create(&models.Verify{Email: payload.Email, VerifyCode: code, ExpireAt: expireAt, AllowResend: allowResend})
 	} else {
-		config.DB.Model(&verify).Update("verify_code", code).Update("expire_at", time.Now().Add(time.Minute*10))
+		config.DB.Model(&verify).Update("verify_code", code).Update("expire_at", expireAt).Update("allow_resend", allowResend)
 	}
 
 	c.JSON(http.StatusOK, vo.BaseResponse[any]{Code: http.StatusOK, Msg: "Success", Data: nil})
