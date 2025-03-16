@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { getToken } from '../utils/token';
+import { getToken } from '../utils/login';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();

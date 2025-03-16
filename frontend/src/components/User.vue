@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="userInfo">
     <code
       class="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-#18181b text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-#27272a transition-colors duration-200"
       aria-haspopup="true"
@@ -13,30 +13,31 @@
 </template>
 
 <script setup lang="ts">
-import { useLocalStorage } from '@vueuse/core';
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useLoginInfo, removeLoginInfo } from '../utils/login';
+import { useRouter } from 'vue-router';
 
 const op = ref<any>(null);
-const userInfo = useLocalStorage<{ email: string; name: string } | undefined>(
-  'userInfo',
-  undefined,
-);
+const userInfo = useLoginInfo();
+const router = useRouter();
 
 const text = computed(() => {
   if (!userInfo.value) {
     return '--';
   }
-  return `${userInfo.value.name} <${userInfo.value.email}>`;
+  return `${userInfo.value?.name} <${userInfo.value?.email}>`;
 });
 
-const items = [{ label: '注销', icon: 'pi pi-sign-out' }];
-
-onMounted(async () => {
-  userInfo.value = {
-    email: 'cno@edgeless.top',
-    name: 'Cno',
-  };
-});
+const items = [
+  {
+    label: '注销',
+    icon: 'pi pi-sign-out',
+    command: () => {
+      removeLoginInfo();
+      router.push('/login');
+    },
+  },
+];
 
 const toggle = (event: MouseEvent) => {
   op.value?.toggle(event);

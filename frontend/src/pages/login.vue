@@ -96,7 +96,7 @@ import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { EMAIL_VALIDATOR, PASSWORD_SIMPLE_VALIDATOR } from '../utils/validator';
 import type { FormSubmitEvent } from '@primevue/forms';
 import LoginLayout from '../layouts/LoginLayout.vue';
-import { setToken } from '../utils/token';
+import { setLoginInfo } from '../utils/login';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -122,13 +122,11 @@ const onFormSubmit = async ({ valid, values }: FormSubmitEvent) => {
   if (valid) {
     emailLoading.value = true;
     const {
-      data: {
-        data: { token },
-      },
+      data: { data },
     } = await Login(values.email, values.password).finally(() => {
       emailLoading.value = false;
     });
-    setToken(token);
+    setLoginInfo(data);
     router.push('/');
   }
 };

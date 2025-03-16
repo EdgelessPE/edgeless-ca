@@ -23,7 +23,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { LoginWithGitHubCallback } from '../api/oauth';
 import LoginLayout from '../layouts/LoginLayout.vue';
-import { setToken } from '../utils/token';
+import { setLoginInfo } from '../utils/login';
 import { useRouter } from 'vue-router';
 
 const route = useRoute();
@@ -37,11 +37,9 @@ onMounted(async () => {
   if (code && state) {
     try {
       const {
-        data: {
-          data: { token },
-        },
+        data: { data },
       } = await LoginWithGitHubCallback(code as string, state as string);
-      setToken(token);
+      setLoginInfo(data);
       router.push('/');
     } catch (error) {
       failed.value = true;
