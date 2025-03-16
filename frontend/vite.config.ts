@@ -14,7 +14,12 @@ export default defineConfig({
       resolvers: [PrimeVueResolver()],
     }),
     UnoCSS({
-      presets: [presetWind3(), presetAttributify()],
+      presets: [
+        presetWind3({
+          dark: 'media',
+        }),
+        presetAttributify(),
+      ],
     }),
   ],
 });
