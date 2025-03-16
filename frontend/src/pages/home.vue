@@ -10,7 +10,7 @@
       <span class="text-16px line-height-24px text-#808080">
         可信 Nep 包密钥对服务
       </span>
-      <div class="bg-$p-surface-800 p-3 rounded-2xl w-60%">
+      <div class="bg-$p-surface-600 p-3 rounded-xl w-60%">
         <InputGroup>
           <InputText
             v-model="q"
@@ -26,7 +26,7 @@
         </InputGroup>
         <div
           v-if="publicKey"
-          class="flex items-center justify-between mt-2 rounded-xl bg-#1f1f1f p-4"
+          class="flex items-center justify-between mt-2 rounded-md bg-$p-surface-0 p-2"
         >
           <code>{{ publicKey }}</code>
           <Button
