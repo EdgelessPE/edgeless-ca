@@ -17,6 +17,8 @@ import { computed, ref } from 'vue';
 import { useLoginInfo, removeLoginInfo } from '../utils/login';
 import { useRouter } from 'vue-router';
 
+const emits = defineEmits(['view-my-key']);
+
 const op = ref<any>(null);
 const userInfo = useLoginInfo();
 const router = useRouter();
@@ -29,6 +31,13 @@ const text = computed(() => {
 });
 
 const items = [
+  {
+    label: '查看我的密钥对',
+    icon: 'pi pi-key',
+    command: () => {
+      emits('view-my-key');
+    },
+  },
   {
     label: '注销',
     icon: 'pi pi-sign-out',
