@@ -40,6 +40,14 @@ func sendVerifyCode(c *gin.Context) {
 		return
 	}
 
+	// 检查 IP 的限制操作
+	var limit models.Limit
+	config.DB.Where("ip =?", c.ClientIP()).First(&limit)
+	if limit.Ip != "" && limit.ActionEmail != payload.Email && limit.ExpireAt.After(time.Now()) {
+		c.JSON(http.StatusForbidden, vo.BaseResponse[any]{Code: http.StatusForbidden, Msg: "一小时内只能向一个用户发送验证码", Data: nil})
+		return
+	}
+
 	// 检查用户是否存在
 	var user models.User
 	config.DB.Where("email =?", payload.Email).First(&user)
@@ -63,12 +71,20 @@ func sendVerifyCode(c *gin.Context) {
 		return
 	}
 
+	// 记录验证码
 	expireAt := time.Now().Add(time.Minute * 10)
 	allowResend := time.Now().Add(time.Second * 60)
 	if verify.Email == "" {
 		config.DB.Create(&models.Verify{Email: payload.Email, VerifyCode: code, ExpireAt: expireAt, AllowResend: allowResend})
 	} else {
 		config.DB.Model(&verify).Update("verify_code", code).Update("expire_at", expireAt).Update("allow_resend", allowResend)
+	}
+
+	// 记录 IP 的限制操作邮箱
+	if limit.Ip == "" {
+		config.DB.Create(&models.Limit{Ip: c.ClientIP(), ActionEmail: payload.Email, ExpireAt: time.Now().Add(time.Hour * 1)})
+	} else {
+		config.DB.Model(&limit).Update("action_email", payload.Email).Update("expire_at", time.Now().Add(time.Hour*1))
 	}
 
 	c.JSON(http.StatusOK, vo.BaseResponse[any]{Code: http.StatusOK, Msg: "Success", Data: nil})
@@ -98,6 +114,7 @@ func recover(c *gin.Context) {
 
 	// 更新密码
 	config.DB.Model(&models.User{}).Where("email =?", payload.Email).Update("pwd_hash", payload.PwdHash)
+
 	c.JSON(http.StatusOK, vo.BaseResponse[any]{Code: http.StatusOK, Msg: "Success", Data: nil})
 }
 

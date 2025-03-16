@@ -1,7 +1,9 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-screen bg-black">
+  <div
+    class="flex flex-col items-center justify-center h-screen bg-#eee dark:bg-#000000"
+  >
     <div
-      class="flex items-center justify-between h-lg w-80% bg-#1f1f1f rounded-3xl"
+      class="flex items-center justify-between h-lg w-80% bg-#1f1f1f rounded-3xl rounded-rt-32px rounded-rb-32px"
     >
       <div
         class="flex-1 items-center justify-center flex flex-col items-center gap-4px"

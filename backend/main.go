@@ -63,7 +63,7 @@ func setupRouter() *gin.Engine {
 func main() {
 	// 初始化数据库
 	config.InitDB()
-	config.DB.AutoMigrate(&models.User{}, &models.Verify{})
+	config.DB.AutoMigrate(&models.User{}, &models.Verify{}, &models.Limit{})
 	log.Println("Database initialized and tables migrated!")
 
 	// 启动服务器
