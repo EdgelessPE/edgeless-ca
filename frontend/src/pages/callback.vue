@@ -22,7 +22,7 @@
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { LoginWithGitHubCallback } from '../api/oauth';
-import LoginLayout from '../components/LoginLayout.vue';
+import LoginLayout from '../layouts/LoginLayout.vue';
 import { setToken } from '../utils/token';
 import { useRouter } from 'vue-router';
 

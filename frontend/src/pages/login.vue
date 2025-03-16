@@ -95,7 +95,7 @@ import { z } from 'zod';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { EMAIL_VALIDATOR, PASSWORD_SIMPLE_VALIDATOR } from '../utils/validator';
 import type { FormSubmitEvent } from '@primevue/forms';
-import LoginLayout from '../components/LoginLayout.vue';
+import LoginLayout from '../layouts/LoginLayout.vue';
 import { setToken } from '../utils/token';
 import { useRouter } from 'vue-router';
 

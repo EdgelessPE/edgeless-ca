@@ -77,7 +77,7 @@
 
 <script setup lang="ts">
 import { zodResolver } from '@primevue/forms/resolvers/zod';
-import LoginLayout from '../components/LoginLayout.vue';
+import LoginLayout from '../layouts/LoginLayout.vue';
 import { ref } from 'vue';
 import type { FormSubmitEvent } from '@primevue/forms';
 import { z } from 'zod';

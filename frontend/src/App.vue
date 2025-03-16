@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    class="flex flex-col items-center justify-center h-screen bg-#eee dark:bg-#000000"
+  >
     <Toast />
     <RouterView />
   </div>
