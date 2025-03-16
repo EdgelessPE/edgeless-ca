@@ -28,6 +28,7 @@ import { computed, ref } from 'vue';
 import { useLoginInfo, removeLoginInfo } from '../utils/login';
 import { useRouter } from 'vue-router';
 import type { MenuItem } from 'primevue/menuitem';
+import { t } from '../i18n';
 const emits = defineEmits(['view-my-key']);
 
 const op = ref<any>(null);
@@ -43,14 +44,14 @@ const text = computed(() => {
 
 const items: MenuItem[] = [
   {
-    label: '查看我的密钥对',
+    label: t('viewMyKey'),
     icon: 'pi pi-key',
     command: () => {
       emits('view-my-key');
     },
   },
   {
-    label: '注销',
+    label: t('logout'),
     icon: 'pi pi-sign-out',
     command: () => {
       removeLoginInfo();

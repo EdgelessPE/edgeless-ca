@@ -1,12 +1,12 @@
 <template>
-  <Dialog v-model:visible="visible" header="我的密钥对" modal>
+  <Dialog v-model:visible="visible" :header="t('myKeypair')" modal>
     <template v-if="loading">
       <div class="pi pi-spin pi-spinner" />
     </template>
     <template v-else-if="keys">
-      <div>公钥</div>
+      <div>{{ t('publicKey') }}</div>
       <KeyViewer :view-key="keys.publicKey" />
-      <div class="mt-4">私钥</div>
+      <div class="mt-4">{{ t('privateKey') }}</div>
       <KeyViewer :view-key="keys.privateKey" />
     </template>
   </Dialog>
@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { GetMyKeypair } from '../api/token';
-
+import { t } from '../i18n';
 const visible = defineModel<boolean>('visible');
 
 const keys = ref<{

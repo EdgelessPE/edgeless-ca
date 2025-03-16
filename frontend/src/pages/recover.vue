@@ -3,9 +3,9 @@
     <div>
       <div class="flex gap-2 items-center">
         <BackBtn />
-        <h2 class="text-2xl font-bold">重置密码</h2>
+        <h2 class="text-2xl font-bold">{{ t('resetPassword') }}</h2>
       </div>
-      <span>验证邮箱以继续</span>
+      <span>{{ t('verifyEmailToContinue') }}</span>
 
       <Form
         v-slot="$form"
@@ -23,12 +23,12 @@
               autofocus
               v-model="email"
             />
-            <label for="on_label">邮箱</label>
+            <label for="on_label">{{ t('email') }}</label>
           </FloatLabel>
           <Button v-if="sendLoading" icon="pi pi-spin pi-spinner" disabled />
           <Button
             v-else
-            :label="countdown ? `${countdown}s` : '验证'"
+            :label="countdown ? `${countdown}s` : t('verify')"
             class="whitespace-nowrap"
             :disabled="
               Boolean(countdown) || !$form.email?.value || $form.email?.invalid
@@ -45,7 +45,7 @@
         >
         <FloatLabel variant="on">
           <InputText name="code" type="text" fluid :feedback="false" />
-          <label for="on_label">验证码</label>
+          <label for="on_label">{{ t('verificationCode') }}</label>
         </FloatLabel>
         <Message
           v-if="$form.code?.invalid"
@@ -56,7 +56,7 @@
         >
         <FloatLabel variant="on" class="mt-16px">
           <Password name="password" toggleMask fluid :feedback="false" />
-          <label for="on_label">新密码</label>
+          <label for="on_label">{{ t('newPassword') }}</label>
         </FloatLabel>
         <Message
           v-if="$form.password?.invalid"
@@ -68,7 +68,7 @@
         <Button
           class="w-full mt-12px"
           type="submit"
-          label="重置"
+          :label="t('reset')"
           :loading="submitLoading"
         />
       </Form>
@@ -87,7 +87,7 @@ import { router } from '../router';
 import { EMAIL_VALIDATOR, PASSWORD_VALIDATOR } from '../utils/validator';
 import { useIntervalFn, useLocalStorage } from '@vueuse/core';
 import { toast } from '../utils/toast';
-
+import { t } from '../i18n';
 const lastSendEmailTime = useLocalStorage('lastSendEmailTime', 0);
 
 const sendLoading = ref(false);
@@ -131,7 +131,10 @@ const resolver = ref(
   zodResolver(
     z.object({
       email: EMAIL_VALIDATOR,
-      code: z.string().min(6, '验证码必须为6位').max(6, '验证码必须为6位'),
+      code: z
+        .string()
+        .min(6, t('verificationCodeLength'))
+        .max(6, t('verificationCodeLength')),
       password: PASSWORD_VALIDATOR,
     }),
   ),
@@ -143,7 +146,7 @@ const onFormSubmit = async ({ valid, values }: FormSubmitEvent) => {
     await Recover(values.email, values.code, values.password).finally(() => {
       submitLoading.value = false;
     });
-    toast('success', '成功', '密码重置成功', 3000);
+    toast('success', t('success'), t('passwordResetSuccess'), 3000);
     router.push('/login');
   }
 };

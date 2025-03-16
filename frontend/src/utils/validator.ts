@@ -1,20 +1,22 @@
 import { z } from 'zod';
-
+import { t } from '../i18n';
 export const EMAIL_VALIDATOR = z
   .string()
-  .min(1, { message: '请输入邮箱' })
-  .email({ message: '邮箱格式错误' });
+  .min(1, { message: t('emailRequired') })
+  .email({ message: t('emailInvalid') });
 
 export const PASSWORD_SIMPLE_VALIDATOR = z
   .string()
-  .min(1, { message: '请输入密码' })
-  .min(8, { message: '密码长度至少为8位' });
+  .min(1, { message: t('passwordRequired') })
+  .min(8, { message: t('passwordLengthAtLeast8') });
 
 export const PASSWORD_VALIDATOR = z
   .string()
-  .min(1, { message: '请输入密码' })
-  .min(8, { message: '密码长度至少为8位' })
-  .regex(/[A-Z]/, { message: '密码必须包含大写字母' })
-  .regex(/[a-z]/, { message: '密码必须包含小写字母' })
-  .regex(/[0-9]/, { message: '密码必须包含数字' })
-  .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: '密码必须包含特殊字符' });
+  .min(1, { message: t('passwordRequired') })
+  .min(8, { message: t('passwordLengthAtLeast8') })
+  .regex(/[A-Z]/, { message: t('passwordMustContainUppercase') })
+  .regex(/[a-z]/, { message: t('passwordMustContainLowercase') })
+  .regex(/[0-9]/, { message: t('passwordMustContainNumber') })
+  .regex(/[!@#$%^&*(),.?":{}|<>]/, {
+    message: t('passwordMustContainSpecialCharacter'),
+  });

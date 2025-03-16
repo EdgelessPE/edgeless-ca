@@ -11,7 +11,7 @@
         Edgeless CA
       </div>
       <span class="text-16px line-height-24px text-#808080">
-        可信 Nep 包密钥对服务
+        {{ t('trustedNepPackageKeyPairService') }}
       </span>
     </div>
     <div
@@ -23,6 +23,8 @@
 </template>
 
 <script setup lang="ts">
+import { t } from '../i18n';
+
 defineSlots<{
   default: () => any;
 }>();

@@ -6,10 +6,10 @@
       <div class="pi pi-github" style="font-size: 2.5rem" />
       <div class="flex items-center justify-center gap-4">
         <div class="text-2xl">
-          <template v-if="!failed"> 正在认证中 </template>
+          <template v-if="!failed"> {{ t('authenticating') }} </template>
           <template v-else>
-            认证失败，请尝试
-            <RouterLink to="/login">重新登录</RouterLink>
+            {{ t('authenticationFailed') }}
+            <RouterLink to="/login"> {{ t('reLogin') }} </RouterLink>
           </template>
         </div>
         <div v-if="!failed" class="pi pi-spin pi-spinner" />
@@ -25,6 +25,7 @@ import { LoginWithGitHubCallback } from '../api/oauth';
 import LoginLayout from '../layouts/LoginLayout.vue';
 import { setLoginInfo } from '../utils/login';
 import { useRouter } from 'vue-router';
+import { t } from '../i18n';
 
 const route = useRoute();
 const router = useRouter();

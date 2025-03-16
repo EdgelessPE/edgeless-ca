@@ -12,11 +12,11 @@
         Edgeless CA
       </div>
       <span class="text-16px line-height-24px text-#808080">
-        可信 Nep 包密钥对服务
+        {{ t('trustedNepPackageKeyPairService') }}
       </span>
       <div class="bg-$p-surface-600 p-3 rounded-xl w-60%">
         <InputGroup>
-          <InputText v-model="q" placeholder="使用邮箱查询其他作者的公钥" />
+          <InputText v-model="q" :placeholder="t('queryPlaceholder')" />
           <InputGroupAddon>
             <Button
               icon="pi pi-search"
@@ -38,6 +38,7 @@ import { GetPublicKey } from '../api/token';
 import { z } from 'zod';
 import User from '../components/User.vue';
 import KeyViewer from '../components/KeyViewer.vue';
+import { t } from '../i18n';
 
 const myKeypairVisible = ref(false);
 
