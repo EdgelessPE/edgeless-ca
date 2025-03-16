@@ -2,6 +2,7 @@ import axios, { AxiosError } from 'axios';
 import type { BaseResponse } from './types';
 import { toast } from '../utils/toast';
 import { router } from '../router';
+import { getToken } from '../utils/login';
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -12,7 +13,7 @@ export const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     // 携带认证信息
-    const token = sessionStorage.getItem('token');
+    const token = getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
