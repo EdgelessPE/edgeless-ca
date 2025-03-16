@@ -1,7 +1,11 @@
 <template>
+  <MyKeypair v-model:visible="myKeypairVisible" />
   <div class="h-full w-full">
-    <User class="absolute top-5 right-4" />
-    <div class="flex flex-col gap-4 items-center w-full mt-40%">
+    <User
+      class="absolute top-5 right-4"
+      @view-my-key="myKeypairVisible = true"
+    />
+    <div class="flex flex-col gap-4 items-center w-full mt-40vh">
       <div
         class="text-48px font-bold bg-gradient-to-b from-#134597 to-#338aca bg-clip-text text-transparent"
       >
@@ -24,18 +28,7 @@
             />
           </InputGroupAddon>
         </InputGroup>
-        <div
-          v-if="publicKey"
-          class="flex items-center justify-between mt-2 rounded-md bg-$p-surface-0 p-2"
-        >
-          <code>{{ publicKey }}</code>
-          <Button
-            icon="pi pi-copy"
-            variant="text"
-            size="small"
-            @click="copyPublicKey"
-          />
-        </div>
+        <KeyViewer v-if="publicKey" :view-key="publicKey" />
       </div>
     </div>
   </div>
@@ -46,7 +39,10 @@ import { ref } from 'vue';
 import { computedAsync, refDebounced } from '@vueuse/core';
 import { GetPublicKey } from '../api/token';
 import { z } from 'zod';
-import { toast } from '../utils/toast';
+import User from '../components/User.vue';
+import KeyViewer from '../components/KeyViewer.vue';
+
+const myKeypairVisible = ref(false);
 
 const q = ref('');
 const debouncedQ = refDebounced(q, 500);
@@ -74,10 +70,4 @@ const publicKey = computedAsync(
   undefined,
   { lazy: true },
 );
-
-const copyPublicKey = () => {
-  if (!publicKey.value) return;
-  navigator.clipboard.writeText(publicKey.value);
-  toast('success', '复制成功', '', 3000);
-};
 </script>

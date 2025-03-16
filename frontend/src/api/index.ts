@@ -15,7 +15,7 @@ instance.interceptors.request.use(
     // 携带认证信息
     const token = getToken();
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = token;
     }
     return config;
   },
