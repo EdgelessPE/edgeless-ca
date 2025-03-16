@@ -25,10 +25,11 @@
             />
             <label for="on_label">邮箱</label>
           </FloatLabel>
+          <Button v-if="sendLoading" icon="pi pi-spin pi-spinner" />
           <Button
+            v-else
             :label="countdown ? `${countdown}s` : '验证'"
             class="whitespace-nowrap"
-            :loading="sendLoading"
             :disabled="
               Boolean(countdown) || !$form.email?.value || $form.email?.invalid
             "
@@ -115,6 +116,7 @@ const onSendEmail = async () => {
   sendLoading.value = true;
   await SendEmail(email.value).finally(() => {
     sendLoading.value = false;
+    countdown.value = 60;
   });
   lastSendEmailTime.value = Date.now();
   resume();

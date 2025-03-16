@@ -16,10 +16,7 @@
       </span>
       <div class="bg-$p-surface-600 p-3 rounded-xl w-60%">
         <InputGroup>
-          <InputText
-            v-model="q"
-            placeholder="使用邮箱或用户名查询其他作者的公钥"
-          />
+          <InputText v-model="q" placeholder="使用邮箱查询其他作者的公钥" />
           <InputGroupAddon>
             <Button
               icon="pi pi-search"
