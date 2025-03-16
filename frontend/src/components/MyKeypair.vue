@@ -6,7 +6,7 @@
     <template v-else-if="keys">
       <div>公钥</div>
       <KeyViewer :view-key="keys.publicKey" />
-      <div>私钥</div>
+      <div class="mt-4">私钥</div>
       <KeyViewer :view-key="keys.privateKey" />
     </template>
   </Dialog>

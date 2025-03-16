@@ -16,18 +16,14 @@ declare module 'vue' {
     Form: typeof import('@primevue/forms/form')['default']
     InputGroup: typeof import('primevue/inputgroup')['default']
     InputGroupAddon: typeof import('primevue/inputgroupaddon')['default']
-    InputNumber: typeof import('primevue/inputnumber')['default']
     InputText: typeof import('primevue/inputtext')['default']
     KeyViewer: typeof import('./src/components/KeyViewer.vue')['default']
-    LoginLayout: typeof import('./src/components/LoginLayout.vue')['default']
     Menu: typeof import('primevue/menu')['default']
     Message: typeof import('primevue/message')['default']
     MyKeypair: typeof import('./src/components/MyKeypair.vue')['default']
     Password: typeof import('primevue/password')['default']
-    Popover: typeof import('primevue/popover')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Toast: typeof import('primevue/toast')['default']
     User: typeof import('./src/components/User.vue')['default']
   }
 }
