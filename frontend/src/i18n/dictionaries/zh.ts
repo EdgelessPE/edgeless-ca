@@ -32,4 +32,6 @@ export const zh = {
   verificationCodeLength: '验证码长度必须为6位',
   success: '成功',
   passwordResetSuccess: '密码重置成功',
+  error: '错误',
+  copySuccess: '复制成功',
 } as const;

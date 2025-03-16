@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
 import { toast } from '../utils/toast';
-
+import { t } from '../i18n';
 const props = defineProps<{
   viewKey: string;
 }>();
@@ -23,6 +23,6 @@ const props = defineProps<{
 const copyPublicKey = () => {
   if (!props.viewKey) return;
   navigator.clipboard.writeText(props.viewKey);
-  toast('success', '复制成功', '', 3000);
+  toast('success', t('copySuccess'), '', 3000);
 };
 </script>

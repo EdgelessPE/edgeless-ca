@@ -3,6 +3,7 @@ import type { BaseResponse } from './types';
 import { toast } from '../utils/toast';
 import { router } from '../router';
 import { getToken } from '../utils/login';
+import { t } from '../i18n';
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -31,9 +32,9 @@ instance.interceptors.response.use(
   (error: AxiosError<BaseResponse<unknown>>) => {
     console.error(error);
     if (error.response) {
-      toast('error', '错误', error.response.data.msg, 3000);
+      toast('error', t('error'), error.response.data.msg, 3000);
     } else {
-      toast('error', '错误', error.message, 3000);
+      toast('error', t('error'), error.message, 3000);
     }
     // 如果是401，则跳转到登录页
     if (error.response?.status === 401) {
