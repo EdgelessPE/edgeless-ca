@@ -11,6 +11,9 @@ export function changeLanguage(key: LangKeys) {
 }
 
 export function getLanguage(): LangKeys {
+  if (cachedKey) {
+    return cachedKey;
+  }
   const browserLang = navigator.language.toLowerCase();
   const isChinese = browserLang.includes('zh');
   const key =

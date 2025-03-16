@@ -3,7 +3,7 @@ import type { BaseResponse } from './types';
 import { toast } from '../utils/toast';
 import { router } from '../router';
 import { getToken } from '../utils/login';
-import { t } from '../i18n';
+import { getLanguage, t } from '../i18n';
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -18,6 +18,8 @@ instance.interceptors.request.use(
     if (token) {
       config.headers.Authorization = token;
     }
+    // 携带语言
+    config.headers['Accept-Language'] = getLanguage();
     return config;
   },
   (error) => {
