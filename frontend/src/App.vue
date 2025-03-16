@@ -4,6 +4,7 @@
   >
     <Toast />
     <RouterView />
+    <Footer />
   </div>
 </template>
 
@@ -11,6 +12,7 @@
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { emitter } from './utils/emit';
+import Footer from './layouts/Footer.vue';
 
 const toast = useToast();
 
