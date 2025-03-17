@@ -8,7 +8,7 @@ import (
 
 type Limit struct {
 	gorm.Model
-	Ip          string `gorm:"unique;index;not null"`
+	Ip          string `gorm:"unique;index;not null;type:inet"`
 	ActionEmail string `gorm:"not null"`
 	ExpireAt    time.Time
 }
