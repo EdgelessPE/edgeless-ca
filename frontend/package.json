@@ -39,5 +39,6 @@
     "unocss": "66.1.0-beta.5",
     "vite": "^6.2.0",
     "vue-tsc": "^2.2.4"
-  }
+  },
+  "packageManager": "pnpm@9.15.0"
 }
