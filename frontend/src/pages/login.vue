@@ -6,7 +6,7 @@
     </div>
     <Button
       class="w-full min-h-33px"
-      :label="t('useGitHubToRegisterOrLogin')"
+      :label="t('useGitHubAccount')"
       icon="pi pi-github"
       :size="showEmailLogin ? 'small' : 'large'"
       :loading="githubLoading"
@@ -75,7 +75,7 @@
       <span>{{ t('useEmailToLogin') }}</span>
       <Button
         class="w-full"
-        :label="t('useEmailToLogin')"
+        :label="t('useEmailAccount')"
         icon="pi pi-envelope"
         :size="showEmailLogin ? undefined : 'large'"
         @click="showEmailLogin = true"
