@@ -14,7 +14,7 @@
     <template v-else>
       <Button
         icon="pi pi-user"
-        label="登录"
+        :label="t('login')"
         severity="secondary"
         size="small"
         @click="router.push('/login')"
