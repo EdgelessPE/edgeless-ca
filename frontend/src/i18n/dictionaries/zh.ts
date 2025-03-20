@@ -34,6 +34,10 @@ export const zh = {
   verificationCodeLength: '验证码长度必须为6位',
   success: '成功',
   passwordResetSuccess: '密码重置成功',
+  passwordSetSuccess: '密码配置成功',
   error: '错误',
   copySuccess: '复制成功',
+  welcomeToEdgelessCa: '欢迎来到 Edgeless CA',
+  configYourFirstPassword: '配置你的初始密码',
+  set: '配置',
 } as const;

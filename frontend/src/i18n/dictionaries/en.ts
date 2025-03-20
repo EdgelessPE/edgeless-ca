@@ -37,6 +37,10 @@ export const en: Dictionary = {
   verificationCodeLength: 'Verification code must be 6 characters long',
   success: 'Success',
   passwordResetSuccess: 'Password reset successfully',
+  passwordSetSuccess: 'Password configured successfully',
   error: 'Error',
   copySuccess: 'Copy successfully',
+  welcomeToEdgelessCa: 'Welcome to Edgeless CA',
+  configYourFirstPassword: 'Config your first password',
+  set: 'Configure',
 };
