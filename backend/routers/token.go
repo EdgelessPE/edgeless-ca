@@ -25,11 +25,11 @@ func GetPublicKeyHandler(c *gin.Context) {
 	// 查找用户
 	result := config.DB.Where("name = ? OR email = ?", name, name).First(&user)
 	if result.Error != nil {
-		c.JSON(http.StatusNotFound, vo.BaseResponse[any]{Code: http.StatusNotFound, Msg: "用户未找到", Data: nil})
+		c.JSON(http.StatusNotFound, vo.BaseResponse[any]{Code: http.StatusNotFound, Msg: config.Translate("user_not_found", c), Data: nil})
 		return
 	}
 
-	c.JSON(http.StatusOK, vo.BaseResponse[string]{Code: http.StatusOK, Msg: "Success", Data: user.PublicToken})
+	c.JSON(http.StatusOK, vo.BaseResponse[string]{Code: http.StatusOK, Msg: config.Translate("success", c), Data: user.PublicToken})
 }
 
 // GetKeyPairHandler 获取当前用户的密钥对
@@ -39,11 +39,11 @@ func GetKeyPairHandler(c *gin.Context) {
 	// 查找当前用户
 	result := config.DB.First(&user, c.GetUint("userID"))
 	if result.Error != nil {
-		c.JSON(http.StatusNotFound, vo.BaseResponse[any]{Code: http.StatusNotFound, Msg: "用户未找到", Data: nil})
+		c.JSON(http.StatusNotFound, vo.BaseResponse[any]{Code: http.StatusNotFound, Msg: config.Translate("user_not_found", c), Data: nil})
 		return
 	}
 
-	c.JSON(http.StatusOK, vo.BaseResponse[map[string]string]{Code: http.StatusOK, Msg: "Success", Data: map[string]string{"public_key": user.PublicToken, "private_key": user.PrivateToken}})
+	c.JSON(http.StatusOK, vo.BaseResponse[map[string]string]{Code: http.StatusOK, Msg: config.Translate("success", c), Data: map[string]string{"public_key": user.PublicToken, "private_key": user.PrivateToken}})
 }
 
 func RegisterTokenRoutes(r *gin.RouterGroup) {

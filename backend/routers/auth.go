@@ -22,15 +22,15 @@ func login(c *gin.Context) {
 	// 查找邮箱匹配
 	config.DB.Where("email =?", payload.Email).First(&user)
 	if user.Email == "" {
-		c.JSON(http.StatusNotFound, vo.BaseResponse[any]{Code: http.StatusNotFound, Msg: "用户未找到", Data: nil})
+		c.JSON(http.StatusNotFound, vo.BaseResponse[any]{Code: http.StatusNotFound, Msg: config.Translate("user_not_found", c), Data: nil})
 		return
 	}
 	if payload.PwdHash != user.PwdHash {
-		c.JSON(http.StatusUnauthorized, vo.BaseResponse[any]{Code: http.StatusUnauthorized, Msg: "密码错误", Data: nil})
+		c.JSON(http.StatusUnauthorized, vo.BaseResponse[any]{Code: http.StatusUnauthorized, Msg: config.Translate("password_error", c), Data: nil})
 		return
 	}
 	token, _ := config.GenerateToken(user.ID)
-	c.JSON(http.StatusOK, vo.BaseResponse[map[string]string]{Code: http.StatusOK, Msg: "Success", Data: map[string]string{"name": user.Name, "email": user.Email, "token": token}})
+	c.JSON(http.StatusOK, vo.BaseResponse[map[string]string]{Code: http.StatusOK, Msg: config.Translate("success", c), Data: map[string]string{"name": user.Name, "email": user.Email, "token": token}})
 }
 
 func sendVerifyCode(c *gin.Context) {
@@ -44,7 +44,7 @@ func sendVerifyCode(c *gin.Context) {
 	var limit models.Limit
 	config.DB.Where("ip =?", c.ClientIP()).First(&limit)
 	if limit.Ip != "" && limit.ActionEmail != payload.Email && limit.ExpireAt.After(time.Now()) {
-		c.JSON(http.StatusForbidden, vo.BaseResponse[any]{Code: http.StatusForbidden, Msg: "一小时内只能向一个用户发送验证码", Data: nil})
+		c.JSON(http.StatusForbidden, vo.BaseResponse[any]{Code: http.StatusForbidden, Msg: config.Translate("one_hour_one_user", c), Data: nil})
 		return
 	}
 
@@ -52,7 +52,7 @@ func sendVerifyCode(c *gin.Context) {
 	var user models.User
 	config.DB.Where("email =?", payload.Email).First(&user)
 	if user.Email == "" {
-		c.JSON(http.StatusNotFound, vo.BaseResponse[any]{Code: http.StatusNotFound, Msg: "用户未找到", Data: nil})
+		c.JSON(http.StatusNotFound, vo.BaseResponse[any]{Code: http.StatusNotFound, Msg: config.Translate("user_not_found", c), Data: nil})
 		return
 	}
 
@@ -60,7 +60,7 @@ func sendVerifyCode(c *gin.Context) {
 	var verify models.Verify
 	config.DB.Where("email =?", payload.Email).First(&verify)
 	if verify.Email != "" && verify.AllowResend.After(time.Now()) {
-		c.JSON(http.StatusTooManyRequests, vo.BaseResponse[any]{Code: http.StatusTooManyRequests, Msg: "操作过于频繁", Data: nil})
+		c.JSON(http.StatusTooManyRequests, vo.BaseResponse[any]{Code: http.StatusTooManyRequests, Msg: config.Translate("operation_too_frequent", c), Data: nil})
 		return
 	}
 
@@ -87,7 +87,7 @@ func sendVerifyCode(c *gin.Context) {
 		config.DB.Model(&limit).Update("action_email", payload.Email).Update("expire_at", time.Now().Add(time.Hour*1))
 	}
 
-	c.JSON(http.StatusOK, vo.BaseResponse[any]{Code: http.StatusOK, Msg: "Success", Data: nil})
+	c.JSON(http.StatusOK, vo.BaseResponse[any]{Code: http.StatusOK, Msg: config.Translate("success", c), Data: nil})
 }
 
 func recover(c *gin.Context) {
@@ -101,11 +101,11 @@ func recover(c *gin.Context) {
 	var verify models.Verify
 	config.DB.Where("email =?", payload.Email).First(&verify)
 	if verify.Email == "" || verify.ExpireAt.Before(time.Now()) {
-		c.JSON(http.StatusBadRequest, vo.BaseResponse[any]{Code: http.StatusBadRequest, Msg: "验证码已过期", Data: nil})
+		c.JSON(http.StatusBadRequest, vo.BaseResponse[any]{Code: http.StatusBadRequest, Msg: config.Translate("code_expired", c), Data: nil})
 		return
 	}
 	if payload.Code == "" || verify.VerifyCode == "" || verify.VerifyCode != payload.Code {
-		c.JSON(http.StatusBadRequest, vo.BaseResponse[any]{Code: http.StatusBadRequest, Msg: "验证码错误", Data: nil})
+		c.JSON(http.StatusBadRequest, vo.BaseResponse[any]{Code: http.StatusBadRequest, Msg: config.Translate("code_error", c), Data: nil})
 		return
 	}
 
@@ -115,7 +115,7 @@ func recover(c *gin.Context) {
 	// 更新密码
 	config.DB.Model(&models.User{}).Where("email =?", payload.Email).Update("pwd_hash", payload.PwdHash)
 
-	c.JSON(http.StatusOK, vo.BaseResponse[any]{Code: http.StatusOK, Msg: "Success", Data: nil})
+	c.JSON(http.StatusOK, vo.BaseResponse[any]{Code: http.StatusOK, Msg: config.Translate("success", c), Data: nil})
 }
 
 func RegisterAuthRoutes(r *gin.RouterGroup) {
