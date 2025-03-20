@@ -4,16 +4,11 @@ import (
 	"crypto/tls"
 	"fmt"
 	"log"
-	"math/rand"
+	"nep-keychain-backend/utils"
 	"net"
 	"net/smtp"
 	"os"
 )
-
-// generateRandomCode generates a 6-digit random verification code.
-func generateRandomCode() string {
-	return fmt.Sprintf("%06d", rand.Intn(1000000))
-}
 
 // SendVerifyCode sends an email with a verification code using SMTP.
 func SendVerifyCode(to string) (string, error) {
@@ -21,7 +16,7 @@ func SendVerifyCode(to string) (string, error) {
 	auth := smtp.PlainAuth("", os.Getenv("MAIL_USER"), os.Getenv("MAIL_PASSWORD"), os.Getenv("MAIL_HOST"))
 
 	// Generate a random verification code.
-	code := generateRandomCode()
+	code := utils.GenerateRandomCode()
 
 	// Append the verification code to the email body.
 	body := fmt.Sprintf("Your verification code is: <strong>%s</strong>", code)

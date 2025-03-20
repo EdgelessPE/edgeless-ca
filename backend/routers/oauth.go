@@ -9,6 +9,7 @@ import (
 	"nep-keychain-backend/utils"
 	"net/http"
 	"os"
+	"time"
 
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/github"
@@ -99,10 +100,10 @@ func OAuthCallback(c *gin.Context) {
 
 	// 如果用户邮箱不存在则在数据库中创建用户
 	var user models.User
-	var tmpPwd string
+	var tmpOpt string
 	config.DB.Where("email = ?", primaryEmail).First(&user)
 	if user.Email == "" {
-		tmpPwd = utils.RandomString(16)
+		tmpPwd := utils.RandomString(16)
 		// 生成密钥对
 		publicKey, privateKey := GenerateKeyPair()
 		user = models.User{
@@ -113,13 +114,19 @@ func OAuthCallback(c *gin.Context) {
 			PrivateToken: privateKey,
 		}
 		config.DB.Create(&user)
+		// 生成临时 opt
+		tmpOpt = utils.GenerateRandomCode()
+		// 写到数据库中
+		expireAt := time.Now().Add(time.Minute * 10)
+		allowResend := time.Now().Add(time.Second * 60)
+		config.DB.Create(&models.Verify{Email: primaryEmail, VerifyCode: tmpOpt, ExpireAt: expireAt, AllowResend: allowResend})
 	}
 
 	// 生成token
 	authToken, _ := config.GenerateToken(user.ID)
 
 	// 返回用户信息和主邮箱
-	c.JSON(http.StatusOK, vo.BaseResponse[map[string]string]{Code: http.StatusOK, Msg: config.Translate("success", c), Data: map[string]string{"name": user.Name, "email": primaryEmail, "token": authToken, "tmpPwd": tmpPwd}})
+	c.JSON(http.StatusOK, vo.BaseResponse[map[string]string]{Code: http.StatusOK, Msg: config.Translate("success", c), Data: map[string]string{"name": user.Name, "email": primaryEmail, "token": authToken, "tmpOpt": tmpOpt}})
 }
 
 func RegisterOAuthRoutes(r *gin.RouterGroup) {
