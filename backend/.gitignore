@@ -2,3 +2,5 @@
 /.env
 /tmp
 .air.toml
+/main
+/main.exe
