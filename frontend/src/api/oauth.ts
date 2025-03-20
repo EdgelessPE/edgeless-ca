@@ -11,6 +11,7 @@ export async function LoginWithGitHubCallback(code: string, state: string) {
       name: string;
       email: string;
       token: string;
+      tmpOpt?: string;
     }>
   >(`/api/oauth/callback?code=${code}&state=${state}`);
 }

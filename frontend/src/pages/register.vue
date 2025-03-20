@@ -70,7 +70,7 @@ const onFormSubmit = async ({ valid, values }: FormSubmitEvent) => {
     submitLoading.value = true;
     await Recover(
       userInfo.value?.email as string,
-      route.query.code as string,
+      route.query.opt as string,
       values.password,
     ).finally(() => {
       submitLoading.value = false;

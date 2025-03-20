@@ -41,7 +41,12 @@ onMounted(async () => {
         data: { data },
       } = await LoginWithGitHubCallback(code as string, state as string);
       setLoginInfo(data);
-      router.push('/');
+      const opt = data.tmpOpt;
+      if (opt) {
+        router.push(`/register?opt=${opt}`);
+      } else {
+        router.push('/');
+      }
     } catch (error) {
       failed.value = true;
     }
